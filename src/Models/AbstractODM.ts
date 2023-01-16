@@ -15,14 +15,19 @@ abstract class AbstractODM<T> {
     return this.model.create({ ...obj });
   }
 
-  public async getAllCar() {
-    const all = await this.model.find({});
+  public async getAllCar(): Promise<T[]> {
+    const all = await this.model.find();
     return all;
   }
   
   public async getById(id: string) {
     const getId = await this.model.findById(id);
     return getId;
+  }
+
+  public async upgradeCar(id: string, car: object) {
+    const update = await this.model.findByIdAndUpdate(id, car, { new: true });
+    return update;
   }
 }
 

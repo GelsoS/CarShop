@@ -44,5 +44,13 @@ class CarController {
     const { status, message } = await this.service.GetById(id);
     return this.res.status(status).json(message);
   }
+
+  public async update() {
+    const { id } = this.req.params;
+    const { body } = this.req;
+    
+    const { status, message } = await this.service.update(id, body);
+    return this.res.status(status).json(message);
+  }
 }
 export default CarController;
