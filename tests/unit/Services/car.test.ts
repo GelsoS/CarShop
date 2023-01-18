@@ -13,6 +13,16 @@ const newCar = {
   doorsQty: 4,
   seatsQty: 5,
 };
+const output = {
+  id: '63c5a05e720f86cd01847478',
+  model: 'fiesta',
+  year: 2008,
+  color: 'prata',
+  status: true,
+  buyValue: 25.990,
+  doorsQty: 4,
+  seatsQty: 5,
+};
 
 const outputCar = [{
   id: '63c5a05e720f86cd01847478',
@@ -25,8 +35,7 @@ const outputCar = [{
   seatsQty: 5,
 }];
 
-const output = {
-  id: '63c5a05e720f86cd01847478',
+const input = {
   model: 'fiesta',
   year: 2008,
   color: 'prata',
@@ -36,17 +45,18 @@ const output = {
   seatsQty: 5,
 };
 
+const invalidID = 'Invalid mongo id';
 const service = new CarService();
 
-describe('testes da camada service', function () {
-  it('ID invalido', async function () {
-    sinon.stub(Model, 'findById').resolves({ message: 'Invalid mongo id' });  
+describe('testes da camada service carros', function () {
+  it('ID invalido ao buscar', async function () {
+    sinon.stub(Model, 'findById').resolves({ message: invalidID });  
     const result = await service.GetById('63c5a05e720f86cd0184740');
       
-    expect(result.message).to.be.deep.equal({ message: 'Invalid mongo id' });
+    expect(result.message).to.be.deep.equal({ message: invalidID });
   });
   
-  it('ID inexistente', async function () {
+  it('ID inexistente ao buscar', async function () {
     sinon.stub(Model, 'findById').resolves(undefined);  
     const result = await service.GetById('63c5a05e720f86cd01847402');
       
@@ -73,6 +83,26 @@ describe('testes da camada service', function () {
     const result = await service.getAllCar();
     
     expect(result).to.be.deep.equal(testCar);
+  });
+
+  it('atualizar carro', async function () {
+    sinon.stub(Model, 'findByIdAndUpdate').resolves(output);
+    const result = await service.update('63c5a05e720f86cd01847478', input);
+    expect(result.message).to.be.deep.equal(output);
+  });
+
+  it('ID invalido ao atualizar carro', async function () {
+    sinon.stub(Model, 'findByIdAndUpdate').resolves({ message: invalidID });  
+    const result = await service.update('63c5a05e720f86cd0184740', input);
+      
+    expect(result.message).to.be.deep.equal({ message: invalidID });
+  });
+  
+  it('ID inexistente ao atualizar carro', async function () {
+    sinon.stub(Model, 'findByIdAndUpdate').resolves(undefined);  
+    const result = await service.update('63c5a05e720f86cd01847402', input);
+      
+    expect(result.message).to.be.deep.equal({ message: 'Car not found' });
   });
 
   afterEach(function () {

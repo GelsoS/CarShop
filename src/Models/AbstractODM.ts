@@ -11,11 +11,11 @@ abstract class AbstractODM<T> {
     this.model = models[this.modelName] || model(this.modelName, this.schema);
   }
 
-  public createCar(obj: T): Promise<T> {
+  public create(obj: T): Promise<T> {
     return this.model.create({ ...obj });
   }
 
-  public async getAllCar(): Promise<T[]> {
+  public async getAll(): Promise<T[]> {
     const all = await this.model.find();
     return all;
   }
@@ -25,8 +25,8 @@ abstract class AbstractODM<T> {
     return getId;
   }
 
-  public async upgradeCar(id: string, car: object) {
-    const update = await this.model.findByIdAndUpdate(id, car, { new: true });
+  public async upgrade(id: string, veicle: object) {
+    const update = await this.model.findByIdAndUpdate(id, veicle, { new: true });
     return update;
   }
 }
